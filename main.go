@@ -1,7 +1,9 @@
 package main
 
-import "moon/cmd/moon"
+import (
+  "moon/cmd/manager"
+)
 
 func main() {
-  moon.Moon()
+  manager.Run()
 }

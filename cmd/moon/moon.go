@@ -1,12 +1,9 @@
 package moon
 
 import (
-  "flag"
-  "fmt"
   "math"
   "strings"
   "time"
-  "github.com/charmbracelet/lipgloss"
 )
 
 const (
@@ -18,7 +15,7 @@ func originalFullMoon() time.Time {
   return time.Date(2024, 05, 23, 0, 0, 0, 0, time.UTC)
 }
 
-func daysToFullMoon() time.Time {
+func DaysToFullMoon() time.Time {
   daysSinceFullMoon := time.Now().Sub(originalFullMoon()).Hours() / 24
   daysUntilNextFullMoon := time.Duration(daysBetweenFullMoons - daysSinceFullMoon * 24)
   targetTime := time.Now().Add(time.Hour * daysUntilNextFullMoon)
@@ -88,36 +85,10 @@ func drawMoon(moonPhasePercentage float64) string {
   return b.String() 
 }
 
-func Moon() {
-  var targetTime time.Time
-  var nextFullMoon = flag.Bool("next", false, "Use this flag to search for the next full moon")
-
-  flag.Parse()
-
-  if *nextFullMoon {
-    targetTime = daysToFullMoon()
-  } else {
-    targetTime = time.Now()
-  }
-
+func Moon(targetTime time.Time) (string, string) {
   moonPhasePercentage := calculateMoonPercentage(targetTime)
   moonPhase := determineMoonPhase(moonPhasePercentage)
   moonDrawing := drawMoon(moonPhasePercentage)
 
-  yellow := "#ffdd91"
-  lightBg := "#b093a3"
-  darkBg := "#282e54"
-
-  var style = lipgloss.NewStyle().
-      Foreground(lipgloss.AdaptiveColor{Light: "#222222", Dark: "#FAFAFA"}).
-      Background(lipgloss.AdaptiveColor{Light: lightBg, Dark: darkBg}).
-      BorderStyle(lipgloss.RoundedBorder()).
-      BorderForeground(lipgloss.Color(yellow)).
-      PaddingTop(2).
-      PaddingBottom(2).
-      PaddingLeft(4).
-      PaddingRight(4)
-
-
-  fmt.Println(style.Render(lipgloss.JoinHorizontal(lipgloss.Top, moonPhase, moonDrawing)))
+  return moonPhase, moonDrawing
 }
