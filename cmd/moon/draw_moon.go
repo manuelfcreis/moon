@@ -1,16 +1,26 @@
 package moon
 
-import "strings"
+import (
+  "math"
+  "strings"
+)
 
 func fillMoon(moonPhasePercentage float64, row []string, negative string) {
-  for i := range row {
-    rowPercentage := float64(i) / float64(len(row))
+  afterNewMoon := moonPhasePercentage >= 4
 
-    if (moonPhasePercentage > rowPercentage) || (moonPhasePercentage < -1 * rowPercentage) {
-      row[i] = ":"
-    } else {
+  for i := range row {
+    rowPercentage := math.Round(float64(i) / float64(len(row)) * 4)
+
+    row[i] = ":"
+
+    if rowPercentage < moonPhasePercentage {
       row[i] = negative
     }
+
+    if afterNewMoon && rowPercentage < moonPhasePercentage - 4{
+      row[i] = ":"
+    }
+
   }
 }
 
@@ -22,13 +32,15 @@ func drawMoon(moonPhasePercentage float64) string {
   var secondMoonRow [9]string
   var thirdMoonRow [9]string
 
-  percentage := (moonPhasePercentage - 4) / 4.0
+  fillMoon(moonPhasePercentage, topRow[:], " ")
+  fillMoon(moonPhasePercentage, firstMoonRow[:], " ")
+  fillMoon(moonPhasePercentage, secondMoonRow[:], " ")
+  fillMoon(moonPhasePercentage, thirdMoonRow[:], " ")
+  fillMoon(moonPhasePercentage, bottomRow[:], ".")
 
-  fillMoon(percentage, topRow[:], " ")
-  fillMoon(percentage, firstMoonRow[:], " ")
-  fillMoon(percentage, secondMoonRow[:], " ")
-  fillMoon(percentage, thirdMoonRow[:], " ")
-  fillMoon(percentage, bottomRow[:], ".")
+  if thirdMoonRow[0] == " " {
+    thirdMoonRow[0] = "." // This is just a nudge to make the New moon prettier
+  }
 
   b.WriteString("       _..._\n")
   b.WriteString("     ." + strings.Join(topRow[:], "") + ".\n")

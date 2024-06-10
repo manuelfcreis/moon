@@ -26,9 +26,9 @@ func style() lipgloss.Style {
 
 func prepareMoon(targetTime time.Time) string {
   style := style() 
-  moonPhase, moonDrawing := moon.Moon(targetTime)
+  moonInformation, moonDrawing := moon.Moon(targetTime)
   styledMoon := style.Render(lipgloss.JoinHorizontal(lipgloss.Top,
-                                                     moonPhase,
+                                                     moonInformation,
                                                      moonDrawing))
 
   return styledMoon

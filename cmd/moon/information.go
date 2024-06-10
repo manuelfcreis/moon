@@ -2,7 +2,7 @@ package moon
 
 import "math"
 
-func determineMoonPhase(moonPhasePercentage float64) string {
+func information(moonPhasePercentage float64) string {
   var moonPhase string
 
   switch int64(math.Round(moonPhasePercentage)) {

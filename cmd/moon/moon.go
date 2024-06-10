@@ -1,6 +1,9 @@
 package moon
 
-import "time"
+import (
+  "time"
+  "math"
+)
 
 const (
   daysBetweenFullMoons = 29.53
@@ -21,15 +24,17 @@ func DaysToFullMoon() time.Time {
 
 func calculateMoonPercentage(currentDate time.Time) float64 {
   daysSinceFullMoon := currentDate.Sub(originalFullMoon()).Hours() / 24
+  modulos := math.Mod(daysSinceFullMoon, daysBetweenFullMoons)
+  moonPercentage := modulos / daysBetweenFullMoons * 8
 
-  return daysSinceFullMoon / daysBetweenFullMoons * 8
+  return math.Round(moonPercentage)
 }
 
 
 func Moon(targetTime time.Time) (string, string) {
   moonPhasePercentage := calculateMoonPercentage(targetTime)
-  moonPhase := determineMoonPhase(moonPhasePercentage)
+  moonInformation := information(moonPhasePercentage)
   moonDrawing := drawMoon(moonPhasePercentage)
 
-  return moonPhase, moonDrawing
+  return moonInformation, moonDrawing
 }
