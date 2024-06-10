@@ -1,17 +1,33 @@
 package moon
 
 import (
+  "flag"
   "fmt"
   "math"
-  "time"
   "strings"
+  "time"
   "github.com/charmbracelet/lipgloss"
 )
 
+const (
+  daysBetweenFullMoons = 29.53
+)
+
+// dates can't be defined as a const :(
+func originalFullMoon() time.Time {
+  return time.Date(2024, 05, 23, 0, 0, 0, 0, time.UTC)
+}
+
+func daysToFullMoon() time.Time {
+  daysSinceFullMoon := time.Now().Sub(originalFullMoon()).Hours() / 24
+  daysUntilNextFullMoon := time.Duration(daysBetweenFullMoons - daysSinceFullMoon * 24)
+  targetTime := time.Now().Add(time.Hour * daysUntilNextFullMoon)
+
+  return targetTime
+}
+
 func calculateMoonPercentage(currentDate time.Time) float64 {
-  originalFullMoon := time.Date(2024, 05, 23, 0, 0, 0, 0, time.UTC)
-  daysBetweenFullMoons := 29.53
-  daysSinceFullMoon := currentDate.Sub(originalFullMoon).Hours() / 24
+  daysSinceFullMoon := currentDate.Sub(originalFullMoon()).Hours() / 24
 
   return daysSinceFullMoon / daysBetweenFullMoons * 8
 }
@@ -73,8 +89,19 @@ func drawMoon(moonPhasePercentage float64) string {
 }
 
 func Moon() {
-  moonPhasePercentage := calculateMoonPercentage(time.Now())
-  moonPhase := determineMoonPhase(moonPhasePercentage) 
+  var targetTime time.Time
+  var nextFullMoon = flag.Bool("next", false, "Use this flag to search for the next full moon")
+
+  flag.Parse()
+
+  if *nextFullMoon {
+    targetTime = daysToFullMoon()
+  } else {
+    targetTime = time.Now()
+  }
+
+  moonPhasePercentage := calculateMoonPercentage(targetTime)
+  moonPhase := determineMoonPhase(moonPhasePercentage)
   moonDrawing := drawMoon(moonPhasePercentage)
 
   yellow := "#ffdd91"
