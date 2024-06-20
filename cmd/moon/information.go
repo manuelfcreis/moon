@@ -1,6 +1,8 @@
 package moon
 
-import "math"
+import (
+	"math"
+)
 
 func information(moonPhasePercentage float64) string {
 	var moonPhase string

@@ -19,5 +19,4 @@ test:
 ## build: build a binary
 .PHONY: build
 build: test
-	go build -o ./app -v
-
+	go build -o ./moon -v
