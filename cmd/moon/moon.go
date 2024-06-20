@@ -1,40 +1,39 @@
 package moon
 
 import (
-  "time"
-  "math"
+	"math"
+	"time"
 )
 
 const (
-  daysBetweenFullMoons = 29.53
+	daysBetweenFullMoons = 29.53
 )
 
 // dates can't be defined as a const :(
 func originalFullMoon() time.Time {
-  return time.Date(2024, 05, 23, 0, 0, 0, 0, time.UTC)
+	return time.Date(2024, 05, 23, 0, 0, 0, 0, time.UTC)
 }
 
 func DaysToFullMoon() time.Time {
-  daysSinceFullMoon := time.Now().Sub(originalFullMoon()).Hours() / 24
-  daysUntilNextFullMoon := time.Duration(daysBetweenFullMoons - daysSinceFullMoon * 24)
-  targetTime := time.Now().Add(time.Hour * daysUntilNextFullMoon)
+	daysSinceFullMoon := time.Now().Sub(originalFullMoon()).Hours() / 24
+	daysUntilNextFullMoon := time.Duration(daysBetweenFullMoons - daysSinceFullMoon*24)
+	targetTime := time.Now().Add(time.Hour * daysUntilNextFullMoon)
 
-  return targetTime
+	return targetTime
 }
 
 func calculateMoonPercentage(currentDate time.Time) float64 {
-  daysSinceFullMoon := currentDate.Sub(originalFullMoon()).Hours() / 24
-  modulos := math.Mod(daysSinceFullMoon, daysBetweenFullMoons)
-  moonPercentage := modulos / daysBetweenFullMoons * 8
+	daysSinceFullMoon := math.Round(currentDate.Sub(originalFullMoon()).Hours() / 24)
+	modulos := math.Mod(daysSinceFullMoon, daysBetweenFullMoons)
+	moonPercentage := modulos / daysBetweenFullMoons * 8
 
-  return math.Round(moonPercentage)
+	return moonPercentage
 }
 
-
 func Moon(targetTime time.Time) (string, string) {
-  moonPhasePercentage := calculateMoonPercentage(targetTime)
-  moonInformation := information(moonPhasePercentage)
-  moonDrawing := drawMoon(moonPhasePercentage)
+	moonPhasePercentage := calculateMoonPercentage(targetTime)
+	moonInformation := information(moonPhasePercentage)
+	moonDrawing := drawMoon(moonPhasePercentage)
 
-  return moonInformation, moonDrawing
+	return moonInformation, moonDrawing
 }

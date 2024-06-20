@@ -1,9 +1,9 @@
 package moon
 
 import (
-  "testing"
-  "time"
-  "strings"
+	"strings"
+	"testing"
+	"time"
 )
 
 func removeWhiteSpace(x string) string {
@@ -16,7 +16,7 @@ func removeWhiteSpace(x string) string {
 
 func testMoonDrawing(t *testing.T, expectedDrawing string, moonDrawing string) {
   if removeWhiteSpace(expectedDrawing) != removeWhiteSpace(moonDrawing) {
-    t.Errorf("Drawing did not generate correctly. \n %s \n %s", expectedDrawing, moonDrawing) 
+    t.Errorf("Drawing did not generate correctly. \n %s \n %s", expectedDrawing, moonDrawing)
   }
 }
 
@@ -28,7 +28,7 @@ func testMoonInformation(t *testing.T, expectedInformation string, moonInformati
 }
 
 func TestFullMoonDrawing(t *testing.T) {
-  information, moonDrawing := Moon(time.Date(2024, 05, 23, 0, 0, 0, 0, time.UTC)) 
+  information, moonDrawing := Moon(time.Date(2024, 05, 23, 0, 0, 0, 0, time.UTC))
   expectedDrawing := `
        _..._
      .:::::::.
@@ -43,23 +43,23 @@ func TestFullMoonDrawing(t *testing.T) {
   testMoonDrawing(t, expectedDrawing, moonDrawing)
 }
 
-func TestLastQuarterMoonDrawing(t *testing.T) {
-  information, moonDrawing := Moon(time.Date(2024, 6, 28, 0, 0, 0, 0, time.UTC)) 
+func TestFirstQuarterMoonDrawing(t *testing.T) {
+  information, moonDrawing := Moon(time.Date(2024, 6, 14, 0, 0, 0, 0, time.UTC))
   expectedDrawing := `
        _..._
-     .::::   .
-    ::::::    :
-    ::::::    :
-    ':::::    '
-      ''::.''
+     .    :::.
+    :     :::::
+    :     :::::
+    '.    ::::'
+      ''..:''
   `
 
-  testMoonInformation(t, "Last quarter moon", information)
+  testMoonInformation(t, "First quarter moon", information)
   testMoonDrawing(t, expectedDrawing, moonDrawing)
 }
 
 func TestNewMoonDrawing(t *testing.T) {
-  information, moonDrawing := Moon(time.Date(2024, 6, 6, 0, 0, 0, 0, time.UTC)) 
+  information, moonDrawing := Moon(time.Date(2024, 6, 6, 0, 0, 0, 0, time.UTC))
   expectedDrawing := `
        _..._
      .       .
@@ -74,18 +74,17 @@ func TestNewMoonDrawing(t *testing.T) {
   testMoonDrawing(t, expectedDrawing, moonDrawing)
 }
 
-func TestFirstQuarterMoonDrawing(t *testing.T) {
-  information, moonDrawing := Moon(time.Date(2024, 6, 14, 0, 0, 0, 0, time.UTC)) 
+func TestLastQuarterMoonDrawing(t *testing.T) {
+  information, moonDrawing := Moon(time.Date(2024, 6, 28, 0, 0, 0, 0, time.UTC))
   expectedDrawing := `
        _..._
-     .    :::.
-    :     :::::
-    :     :::::
-    '.    ::::'
-      ''..:''
+     .::::   .
+    ::::::    :
+    ::::::    :
+    ':::::    '
+      ''::.''
   `
 
-  testMoonInformation(t, "First quarter moon", information)
+  testMoonInformation(t, "Last quarter moon", information)
   testMoonDrawing(t, expectedDrawing, moonDrawing)
 }
-
